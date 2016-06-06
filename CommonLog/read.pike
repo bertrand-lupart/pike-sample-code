@@ -15,7 +15,7 @@ int main(int argc, array(string) argv)
   int start_offset = 0;
 
   // Here it is, open commonlog_file at offset start_offset and
-  // invoque handle_commonlog_line() for each new line
+  // invoke handle_commonlog_line() for each new line
   int bytes_read =
     CommonLog.read(handle_commonlog_line, commonlog_file, start_offset);
 
@@ -28,7 +28,7 @@ int main(int argc, array(string) argv)
 
                         /* Script-specific functions */
 
-// for each valid commonlog line found, this function will be invoqued
+// for each valid commonlog line found, this function will be invoked
 void handle_commonlog_line(array commonlog_parts, int end_offset)
 {
   // Do you fancy stuff here. We just print our data as an example

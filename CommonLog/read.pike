@@ -4,7 +4,8 @@
 
 // here is the path to the commonlog file
 string commonlog_file="commonlog_sample.log";
-// could be a Stdio.File object is you prefer
+// alternatively, could be a Stdio.File object 
+//object commonlog_file = Stdio.File("commonlog_sample.log", "r");
 
 int commonlog_entries=0;
 
@@ -37,6 +38,7 @@ void handle_commonlog_line(array commonlog_parts, int end_offset)
   write("    parts : %O\n", commonlog_parts);
   write("end offset: %O\n\n",end_offset);
 
+  // count how many lines we processed
   commonlog_entries++;
 
   return;

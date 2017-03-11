@@ -30,6 +30,12 @@ void http_callback(Protocols.HTTP.Server.Request request)
   // For example :
   string not_query = request->not_query;
 
+  // Let's output all request data available on stdout
+  foreach(indices(request), string req)
+  {
+    write("%O: %O\n", req, request[req]);
+  }
+
   // Have fun with response
   response->error="200";
   response->type="text/html";

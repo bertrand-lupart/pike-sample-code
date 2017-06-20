@@ -2,11 +2,13 @@
 
 int main(int argc, array(string) argv)
 {
-												 /* MIME message generation */
+                         /* MIME message generation */
 
 	// globals
 	string addr_from = "from@example.com";
-	string addr_to = "to@example.com";
+	array addr_to = ({ "to1@example.com", "to2@example.com" });
+	array addr_cc = ({ "cc1@example.com", "cc2@example.com" });
+	array addr_bcc = ({ "bcc1@example.com", "bcc2@example.com" });
 	string host_smtp = "smtp.example.com";
   string path_attach = "/tmp/image.png";
 
@@ -39,16 +41,23 @@ int main(int argc, array(string) argv)
 				"MIME-Version":"1.0",
 				"Subject":head_subject,
 				"From":addr_from,
-				"To":addr_to,
+				"To":addr_to*",",
+				"CC":addr_cc*",",
 				"Date":Calendar.now()->format_smtp(),
 			]),
 			({ mime_plain, mime_attach  })
 		);
 
                            /* Actually send email */
+	mixed err = catch{
+    Protocols.SMTP.Client(host_smtp)->send_message(addr_from,
+      addr_to+addr_cc+addr_bcc, (string)mime_mail);
+  };
 
-	Protocols.SMTP.Client(host_smtp)->send_message(addr_from,
-      ({ addr_to }), (string)mime_mail);
+  if(err)
+  {
+    throw( ({ "Can't send email\n", err }) );
+  }
 
   return 0;
 }

@@ -8,11 +8,12 @@ int main(int argc, array(string) argv)
 	string addr_from = "from@example.com";
 	string addr_to = "to@example.com";
 	string host_smtp = "smtp.example.com";
+  string path_attach = "/tmp/image.png";
 
 	// mail data
 	string head_subject = "Pike MIME.Message attachment";
   string text_plain = "Please find this image as attachment\n";
-	string data_attach = Stdio.read_bytes("image.png");
+	string data_attach = Stdio.read_bytes(path_attach);
 
 	// building MIME parts
 	object mime_plain =

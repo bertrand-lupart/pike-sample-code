@@ -1,5 +1,12 @@
 #!/usr/bin/env pike
 
+/* This script shows the basics of MIME.Message() usage.
+ *
+ * It builds a simple text/plain message with an attached picture.
+ *
+ * Message is then sent using Protocols.SMTP.Client()
+ */
+
 int main(int argc, array(string) argv)
 {
                          /* MIME message generation */
@@ -13,11 +20,11 @@ int main(int argc, array(string) argv)
   string path_attach = "/tmp/image.png";
 
 	// mail data
-	string head_subject = "Pike MIME.Message attachment";
-  string text_plain = "Please find this image as attachment\n";
+	string head_subject = "Pike MIME.Message() example with attachment";
+  string text_plain = "Please have a look at the attached image\n";
 	string data_attach = Stdio.read_bytes(path_attach);
 
-	// building MIME parts
+	// building basic MIME text part
 	object mime_plain =
 		MIME.Message(text_plain,
 			([
@@ -25,6 +32,8 @@ int main(int argc, array(string) argv)
 				"content-type": "text/plain; charset=utf-8;"
 			])
 		);
+  // building basic MIME image attached
+  // note that the image data is automatically encoded
 	object mime_attach =
 		MIME.Message(data_attach,
 			([
@@ -34,7 +43,7 @@ int main(int argc, array(string) argv)
 			])
 		);
 
-	// main MIME part	
+	// main MIME message that will assemble to previously built MIME
   object mime_mail =
 		MIME.Message("This is a multipart message in MIME format",
 			([
@@ -49,7 +58,11 @@ int main(int argc, array(string) argv)
 		);
 
                            /* Actually send email */
+
+  // catch / throw is optional, added for the sake of completeness
 	mixed err = catch{
+    // MIME message is casted to string and sent via SMTP
+    // note that cc and bcc recipient should be mentionned here
     Protocols.SMTP.Client(host_smtp)->send_message(addr_from,
       addr_to+addr_cc+addr_bcc, (string)mime_mail);
   };
